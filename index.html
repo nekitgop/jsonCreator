@@ -2,11 +2,30 @@
 <html>
 <head>
     <title>Json creator</title>
-    <script type="text/javascript">
-
-    </script>
+    <!-- lib -->
+    <meta charset="utf-8">
+    <script type="text/javascript" src="public/javascript/lib/jquery-1.9.0.js" charset="utf-8"></script>
+    <!--<script type="text/javascript" src="public/javascript/lib/backbone-min.js" charset="utf-8"></script>-->
+    <script type="text/javascript" src="public/javascript/lib/underscore-min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="public/javascript/lib/backbone.js" charset="utf-8"></script>
+    <!-- backbone classes -->
+    <!--<script type="text/javascript" src="public/javascript/Model.js" charset="utf-8"></script>-->
+    <!--<script type="text/javascript" src="public/javascript/View.js" charset="utf-8"></script>-->
+    <!--<script type="text/javascript" src="public/javascript/Controller.js" charset="utf-8"></script>-->
+    <!-- init app -->
+    <script type="text/javascript" src="public/javascript/app.js" charset="utf-8"></script>
 </head>
 <body>
 
+<input type="button" value="add"/>
+<div id="view">
+</div>
+
 </body>
+<script type="text/template" id="item-template" charset="utf-8">
+    <div class="view">
+        <label>Имя поля:</label><textarea><%= key %></textarea>
+        <label>Значение:</label><textarea><%= val %></textarea>
+    </div>
+</script>
 </html>

@@ -6,8 +6,9 @@ $(function () {
 });
 function init() {
 
-    //TODO: на данный момент добавляется много моделей в коллекцию но отображается лишь одна новая вьюшка
+    //TODO:
 
+    // old*
     // Логика:
     // добавляем поле(чистое, без контента не сохраняем в модель(если оно не клонировано с данными)).
     // заполняем поле, если все круто -> показываем транслитный ключ и создается новая модель и добавляется к колекции,
@@ -54,6 +55,10 @@ function init() {
 
         template:_.template($('#item-template').html()),
 
+        events: {
+            "keypress textarea":"edit" // Обработчик клика на кнопке "Проверить"
+        },
+
         render: function(){
 
             // Save не на месте
@@ -61,8 +66,13 @@ function init() {
 
             this.$el.html(this.template(this.model.toJSON()));
 //            this.$el.toggleClass('done', this.model.get('done'));
-//            this.input = this.$('.edit');
+            this.inputKey = this.$('.inputKey');
+            this.inputValue = this.$('.inputValue');
             return this;
+        },
+        edit: function(){
+            //TODO: do this throw the timeout that clear when changes is continue
+            this.model.save({key: this.inputKey.val(), val: this.inputValue.val()});
         }
     });
 
@@ -89,8 +99,14 @@ function init() {
         add:function () {
             List.add();
         }
+
     });
 
     var view = new View;
+
+}
+
+// transform functions
+function grouped(){
 
 }

@@ -1,3 +1,4 @@
+// Проверка конвертеров
 $(function(){
     $.get('json_example.json', function(json){
         var data =  $.parseJSON(json);

@@ -1,3 +1,6 @@
+// Extend ways:
+// можно сохранять параметры отображения каждой формы
+
 $(function () {
     init();
 //    initModel();
@@ -6,30 +9,14 @@ $(function () {
 });
 function init() {
 
-    //TODO:
-
-    // old*
-    // Логика:
-    // добавляем поле(чистое, без контента не сохраняем в модель(если оно не клонировано с данными)).
-    // заполняем поле, если все круто -> показываем транслитный ключ и создается новая модель и добавляется к колекции,
-    // когда в коллекции новая модель срабатывает событие (толи change толи add) срабатывает апдейт вьюшки
-
-    // Обязательно сначала создадим модели!
-
     var Model = Backbone.Model.extend({
         defaults:{
             key: "key hold",
             val: "value hold"
         },
 
-        url: 'http://localhost:3000/jsonCreator/base.php',
+        url: 'http://localhost:3000/jsonCreator/app/async_controller.php',
 
-      /*  url: function() {
-            var base = getValue(this, 'urlRoot') || getValue(this.collection, 'url') || urlError();
-            if (this.isNew()) return base;
-            return base + (base.charAt(base.length - 1) == '/' ? '' : '/') + encodeURIComponent(this.id);
-        },
-*/
         initialize: function() {},
         toggle: function() {
             this.save({done: !this.get("done")});
@@ -40,29 +27,32 @@ function init() {
     });
 
     var Collection = Backbone.Collection.extend({
-        model: Model
+        model: Model,
 
-        /*url: function() {
-            return this.document.url() + '/notes';
-        }*/
+        url: 'http://localhost:3000/jsonCreator/app/async_controller.php'
+
     });
 
     var List = new Collection;
 
     var Item = Backbone.View.extend({
 
+        initialize: function(){
+            this.model.bind('change', this.render, this);
+        },
+
         tagName: 'li',
 
         template:_.template($('#item-template').html()),
 
         events: {
-            "keypress textarea":"edit" // Обработчик клика на кнопке "Проверить"
+            "blur textarea":"edit" // Обработчик клика на кнопке "Проверить"
         },
 
         render: function(){
 
             // Save не на месте
-            this.model.save();
+//            this.model.save();
 
             this.$el.html(this.template(this.model.toJSON()));
 //            this.$el.toggleClass('done', this.model.get('done'));
@@ -71,42 +61,125 @@ function init() {
             return this;
         },
         edit: function(){
-            //TODO: do this throw the timeout that clear when changes is continue
-            this.model.save({key: this.inputKey.val(), val: this.inputValue.val()});
+            this.model.save({key: this.inputKey.val(), val: this.inputValue.val()}/*, {success: function(data, data2){
+                console.log(data, data2)
+            }}*/);
         }
     });
 
 
-    var View = Backbone.View.extend({
+
+    /*var View = Backbone.View.extend({
 
         initialize: function(){
-            // подписываемся на событие в коллекции
+            // это обработчики событий коллекции
             List.bind('add', this.addOne, this);
-//            List.bind('reset', this.addOne, this);
+            List.bind('reset', this.addAll, this);
         },
 
         el:$("body"), // DOM элемент widget'а
 
+        // это обработчики событий DOM
         events:{
-            "click input:button":"add" // Обработчик клика на кнопке "Проверить"
+            "click .add":"add",
+            "click .addList":"addList"
         },
 
         addOne: function(item){
             var view = new Item({model: item});
             this.$("#view").append(view.render().el);
         },
+        addAll: function(){
+            List.each(this.addOne)
+        },
 
-        add:function () {
-            List.add();
+        add:function (prop) {
+            // Создает и добавляет модель в колекцию List и инициирует событие add в этой коллекции,
+            // которое обрабатывается выше, в частности это обработчик addOne вьюшки который уже добавляет
+            // элемент c содержимым(дефолтным) в DOM
+            //TODO: подумать над рекурсией
+            List.add(prop);
+        },
+        addList: function(){
+
+            // ссылкой на коллекцию будет аттрибут экземпляра модели с именем val.
+            // вьюшка для коллекции должна быть другой т.к. нужен контейнер и val не отображается как
+            // обьект
+            this.add({key: 'имя коллекции', val:*//* тут всеже должна быть не новая колекция а наверное ее хеш *//* new Collection});
+
+            // логика
+            // сначала создать новую модель, потом присвоить val новую коллекцию
+            // вопрос как рекурсивно применять свойства типа fetch() add() итд.
+
+
         }
 
     });
 
     var view = new View;
 
+    List.fetch()
+
+*/
+
+
+// new init !!
+    var newList = new Collection;
+
+    //todo: так не пойдет, нужно оставлять ссылки в глобальном пространстве, хотя хз
+    function initView(newCollection){
+        var View = Backbone.View.extend({
+
+            initialize: function(){
+                // это обработчики событий коллекции
+                newCollection.bind('add', this.addOne, this);
+                newCollection.bind('reset', this.addAll, this);
+            },
+
+            el:$("body"), // DOM элемент widget'а
+
+            // это обработчики событий DOM
+            events:{
+                "click .add":"add",
+                "click .addList":"addList"
+            },
+
+            addOne: function(item){
+                var view = new Item({model: item});
+                this.$("#view").append(view.render().el);
+            },
+            addAll: function(){
+                newCollection.each(this.addOne)
+            },
+
+            add:function (prop) {
+                // Создает и добавляет модель в колекцию List и инициирует событие add в этой коллекции,
+                // которое обрабатывается выше, в частности это обработчик addOne вьюшки который уже добавляет
+                // элемент c содержимым(дефолтным) в DOM
+                //TODO: подумать над рекурсией
+                newCollection.add(prop);
+            },
+            //TODO: вызывать метод при условии наличия вложенных коллекций или чтото типа того
+            addList: function(){
+
+                // ссылкой на коллекцию будет аттрибут экземпляра модели с именем val.
+                // вьюшка для коллекции должна быть другой т.к. нужен контейнер и val не отображается как
+                // обьект
+
+
+                this.add({key: 'имя коллекции', val:/* тут всеже должна быть не новая колекция а наверное ее хеш */ new Collection});
+
+                // логика
+                // сначала создать новую модель, потом присвоить val новую коллекцию
+                // вопрос как рекурсивно применять свойства типа fetch() add() итд.
+
+
+            }
+
+        });
+    }
+    initView(newList)
+
+
 }
 
-// transform functions
-function grouped(){
-
-}

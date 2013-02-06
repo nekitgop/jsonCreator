@@ -2,10 +2,13 @@
 <html>
 <head>
     <title>Json creator</title>
-    <!-- lib -->
     <meta charset="utf-8">
+    <!-- stylesheets -->
+    <link href="public/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="public/stylesheets/stylesheet.css" rel="stylesheet" media="screen">
+    <!-- lib -->
     <script type="text/javascript" src="public/javascript/lib/jquery-1.9.0.js" charset="utf-8"></script>
-    <!--<script type="text/javascript" src="public/javascript/lib/backbone-min.js" charset="utf-8"></script>-->
+    <script type="text/javascript" src="public/javascript/lib/bootstrap.js" charset="utf-8"></script>
     <script type="text/javascript" src="public/javascript/lib/underscore-min.js" charset="utf-8"></script>
     <script type="text/javascript" src="public/javascript/lib/backbone.js" charset="utf-8"></script>
     <!-- backbone classes -->
@@ -16,16 +19,32 @@
     <script type="text/javascript" src="public/javascript/app.js" charset="utf-8"></script>
 </head>
 <body>
+<div class="container-fluid">
+    <div class="row-fluid main">
+        <div class="span5 buildingTree">
 
-<input type="button" value="add"/>
-<div id="view">
+            <div id="view"></div>
+            <div class="btn add">Добавить</div>
+            <div class="btn addList">Добавить список</div>
+
+        </div>
+        <div class="span7">
+
+        </div>
+    </div>
 </div>
 
+
 </body>
+
 <script type="text/template" id="item-template" charset="utf-8">
+    <!-- change it to mustache.js solution -->
     <div class="view">
-        <label>Имя поля:</label><textarea class="inputKey"><%= key %></textarea>
-        <label>Значение:</label><textarea class="inputValue"><%= val %></textarea>
+        <form class="form-inline">
+            <textarea type="text" class="inputKey" placeholder="имя поля"><%= key %></textarea>
+            <textarea type="text" class="inputValue" placeholder="контент"><%= val %></textarea>
+        </form>
     </div>
 </script>
+
 </html>

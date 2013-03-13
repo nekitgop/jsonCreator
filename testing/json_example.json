@@ -1,4 +1,3 @@
-
 { "data":[
     {
         "key":"keyname1",
@@ -10,20 +9,37 @@
     },
 
     {
-        "key": "key",
+        "key":"key",
         "val":[
-            {
-                "key": "keyname23",
-                "val": "value"
-            },
-            {
-                "key": "keyname",
-                "val": "value123"
-            },
-            {
-                "key": "keyname1",
-                "val": "value"
-            }
+            [
+                {
+                    "key":"keyname23",
+                    "val":"value"
+                },
+                {
+                    "key":"keyname",
+                    "val":"value123"
+                },
+                {
+                    "key":"keyname1",
+                    "val":"value"
+                }
+            ],
+            [
+                {
+                    "key":"keyname23",
+                    "val":"value"
+                },
+                {
+                    "key":"keyname",
+                    "val":"value123"
+                },
+                {
+                    "key":"keyname1",
+                    "val":"value"
+                }
+            ]
+
         ]
     }
 ]

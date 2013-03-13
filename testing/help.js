@@ -1,4 +1,6 @@
 $(function(){
+    calc([3,5,1,3,9,8,7]);
+
     $.get('json_example.json', function(json){
         var data =  $.parseJSON(json);
 

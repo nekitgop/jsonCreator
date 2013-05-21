@@ -1,0 +1,31 @@
+.buildingTree {
+  border: 1px solid #808080;
+  border-radius: 4px;
+  min-height: 100%;
+  padding: 10px;
+}
+html,
+body,
+.container-fluid,
+.main {
+  height: 100%;
+}
+.buildingTree {
+  height: 95%;
+}
+.main {
+  margin: 10px;
+}
+.add {
+  float: right;
+}
+#view li {
+  list-style: none;
+}
+#view .inputKey {
+  height: 20px;
+  width: 40%;
+}
+#view .inputValue {
+  width: 53%;
+}
